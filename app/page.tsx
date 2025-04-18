@@ -2,7 +2,7 @@
 
 import type React from "react";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import Image from "next/image";
 import { Download, Copy } from "lucide-react";
 import html2canvas from "html2canvas-pro";
@@ -24,20 +24,21 @@ export default function Home() {
   const [copySuccess, setCopySuccess] = useState(false);
   const [downloadSuccess, setDownloadSuccess] = useState(false);
 
-  const [imgsrc, setimgsrc] = useState(() => {
+  const [imgsrc, setimgsrc] = useState("");
+
+  const fileIn = useRef<HTMLInputElement>(null);
+  const previewRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
     const randomIndex = Math.floor(Math.random() * imgs.length);
-    return imgs[randomIndex];
-  });
+    setimgsrc(imgs[randomIndex]);
+  }, []);
 
   const cycle = () => {
     const currentIndex = imgs.indexOf(imgsrc);
     const nextIndex = (currentIndex + 1) % imgs.length;
     setimgsrc(imgs[nextIndex]);
   };
-
-  const fileIn = useRef<HTMLInputElement>(null);
-
-  const previewRef = useRef<HTMLDivElement>(null);
 
   const imgOverride = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
